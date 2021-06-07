@@ -10,6 +10,7 @@ function writePassword() {
 
 }
 
+// Generate all characters for each character type
 const LOWERCASE = "abcdefghijklmnopqrstuvwxyz".split("");
 const UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 const NUMERIC = "0123456789".split("");
@@ -18,6 +19,7 @@ const SPECIAL = "!@#$%^&*()-_+=".split("");
 function generatePassword() {
     // Get minimum password length
     var minLength = Number.NEGATIVE_INFINITY;
+    // `isNaN` is to prevent non-number from being provided
     while (isNaN(minLength) || minLength < 8) {
         minLength = Number(prompt("Select minimum password length (cannot be less than 8)", 8));
     }
@@ -45,6 +47,8 @@ function generatePassword() {
             case 2:
             case 3:
             case 4:
+                // Push number associated with character type if it does not
+                // exist in the array.
                 if (!charTypes.includes(option)) charTypes.push(option);
                 break;
             case 5:
@@ -54,16 +58,22 @@ function generatePassword() {
 
     // Generate password
     var newPassword = ""
+    // Check to see if the password meets the criteria needed to be a valid
+    // password. Note that the first time it runs, it is passed
+    // an empty string, which will always return false.
     while (!meetsCriteria(newPassword, charTypes)) {
+        // Start over with an empty string
         newPassword = "";
         // Generate random number: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
         newLength = Math.floor(Math.random() * (maxLength - minLength) + minLength);
         // Assign a new character `newLength` number of times
         for (var i = 0; i < newLength; i++) {
-            // Select a character type
+            // Randomly select a character type
             option = charTypes[
                 Math.floor(Math.random() * charTypes.length)
             ];
+            // Randomly select a character from the selected character
+            // type
             switch (option) {
                 case 1:
                     newPassword += LOWERCASE[
@@ -94,18 +104,20 @@ function generatePassword() {
 
 // Checks if all character types were used in password
 function meetsCriteria(password, charTypes) {
+    // Always return false for empty strings
     if (password.length === 0) return false;
-    console.log(password);
 
+    // Check all character types to see if the password meets
+    // the criteria
     return charTypes.every((type) => {
+        // Check the characters of the password to see if the
+        // current character type exists within.
         switch (type) {
             case 1:
-                console.log(type);
                 return password.split("").some(
                     ch => LOWERCASE.includes(ch)
                 );
             case 2:
-                console.log(type);
                 return password.split("").some(
                     ch => UPPERCASE.includes(ch)
                 );
