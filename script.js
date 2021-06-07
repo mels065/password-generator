@@ -108,10 +108,10 @@ function meetsCriteria(password, charTypes) {
     if (password.length === 0) return false;
 
     // Check all character types to see if the password meets
-    // the criteria
+    // the criteria using the `every` method.
     return charTypes.every((type) => {
         // Check the characters of the password to see if the
-        // current character type exists within.
+        // current character type exists within using the `some` method.
         switch (type) {
             case 1:
                 return password.split("").some(
