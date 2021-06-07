@@ -10,6 +10,11 @@ function writePassword() {
 
 }
 
+const LOWERCASE = "abcdefghijklmnopqrstuvwxyz".split("");
+const UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const NUMERIC = "0123456789".split("");
+const SPECIAL = "!@#$%^&*()-_+=".split("");
+
 function generatePassword() {
     // Get minimum password length
     var minLength = Number.NEGATIVE_INFINITY;
@@ -46,6 +51,74 @@ function generatePassword() {
                 if (charTypes.length == 0) charTypes = null;
         }
     }
+
+    // Generate password
+    var newPassword = ""
+    while (!meetsCriteria(newPassword, charTypes)) {
+        newPassword = "";
+        // Generate random number: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+        newLength = Math.floor(Math.random() * (maxLength - minLength) + minLength);
+        // Assign a new character `newLength` number of times
+        for (var i = 0; i < newLength; i++) {
+            // Select a character type
+            option = charTypes[
+                Math.floor(Math.random() * charTypes.length)
+            ];
+            switch (option) {
+                case 1:
+                    newPassword += LOWERCASE[
+                        Math.floor(Math.random() * LOWERCASE.length)
+                    ];
+                    break;
+                case 2:
+                    newPassword += UPPERCASE[
+                        Math.floor(Math.random() * UPPERCASE.length)
+                    ];
+                    break;
+                case 3:
+                    newPassword += NUMERIC[
+                        Math.floor(Math.random() * NUMERIC.length)
+                    ];
+                    break;
+                case 4:
+                    newPassword += SPECIAL[
+                        Math.floor(Math.random() * SPECIAL.length)
+                    ];
+                    break;
+            }
+        }
+    }
+
+    return newPassword;
+}
+
+// Checks if all character types were used in password
+function meetsCriteria(password, charTypes) {
+    if (password.length === 0) return false;
+    console.log(password);
+
+    return charTypes.every((type) => {
+        switch (type) {
+            case 1:
+                console.log(type);
+                return password.split("").some(
+                    ch => LOWERCASE.includes(ch)
+                );
+            case 2:
+                console.log(type);
+                return password.split("").some(
+                    ch => UPPERCASE.includes(ch)
+                );
+            case 3:
+                return password.split("").some(
+                    ch => NUMERIC.includes(ch)
+                );
+            case 4:
+                return password.split("").some(
+                    ch => SPECIAL.includes(ch)
+                );
+        }
+    });
 }
 
 // Add event listener to generate button
